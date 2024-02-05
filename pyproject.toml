@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "frenetix-occlusion"
+version = "2024.1"
+description = "Frenetix Occlusion-aware Trejectory Validation Framework"
+license = "LGPL-3.0-or-later"
+authors = [
+    "Korbinian Moller <korbinian.moller@tum.de>",
+    "Rainer Trauth <rainer.trauth@tum.de>",
+]
+maintainers = [
+    "Korbinian Moller <korbinian.moller@tum.de>"
+]
+readme = "README.md"
+
+packages = [
+    { include = "frenetix_occlusion" },
+]
+
+[tool.poetry.dependencies]
+
+python = ">=3.9,<3.12"
+
+commonroad-io = "==2023.2"
+numpy = "^1.24.2"
+commonroad-drivability-checker = "^2023.1"
+commonroad-route-planner = "^2022.3"
+shapely = "^2.0.2"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=6.2.1"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.5.1"
+
+[tool.poetry.scripts]
+reactive-planner = "main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
