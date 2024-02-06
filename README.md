@@ -1,9 +1,9 @@
 
 [![Linux](https://img.shields.io/badge/os-linux-blue.svg)](https://www.linux.org/)
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 
 
-# Occlusion-aware Trajectory Assessment
+# 🚸 Occlusion-aware Trajectory Assessment 🚴
 
 <details>
 <summary> <h2> 🔧 Requirements & Pre-installation Steps </h2> </summary>
@@ -11,10 +11,14 @@
 ### Requirements
 The software is  developed and tested on recent versions of Linux. We strongly recommend to use [Ubuntu 22.04](https://ubuntu.com/download/desktop) or higher.
 For the python installation, we suggest the usage of Virtual Environment with Python 3.10 or Python 3.9
-For the development IDE we suggest [PyCharm](http://www.jetbrains.com/pycharm/)
+For the development IDE we suggest [PyCharm](http://www.jetbrains.com/pycharm/).
+
+To execute this example, we recommend using the [Frenetix Motion Planning Algorithm](https://github.com/TUM-AVS/Frenetix-Motion-Planner). 
+An appropriate configuration is already included in this package.
+
 
 ### Pre-installation Steps
-1. Make sure that the following **dependencies** are installed on your system for the C++ implementation:
+1. Make sure that the following **dependencies** are installed on your system for the C++ implementation of Frenetix:
    * [Eigen3](https://eigen.tuxfamily.org/dox/) 
      * On Ubuntu: `sudo apt-get install libeigen3-dev`
    * [Boost](https://www.boost.org/)
@@ -27,11 +31,51 @@ For the development IDE we suggest [PyCharm](http://www.jetbrains.com/pycharm/)
 2. **Clone** this repository & create a new virtual environment `python3.10 -m venv venv`
 
 3. **Install** the package:
-    * Source & Install the package via pip: `source venv/bin/activate` & `pip install -r .`
+    * Source & Install the package via pip: `source venv/bin/activate` & `pip install .`
     * Everything should install automatically. If not please write [korbinian.moller@tum.de](mailto:korbinian.moller@tum.de).
+4. **Optional**: Download additional Scenarios [here](https://gitlab.lrz.de/tum-cps/commonroad-scenarios.git)
 
 
 </details>
+
+
+<details>
+<summary> <h2> 📋 Step-by-Step Instructions to execute Frenetix-Occlusion </h2> </summary>
+
+To execute the main with an example Frenet Planning algorithm from [here](https://github.com/TUM-AVS/Frenetix-Motion-Planner), do the following steps: 
+
+1. Install Frenetix-Motion-Planner with `pip install frenetix-motion-planner`
+2. **OPTIONAL:** Configure the Occlusion Module parameters or Planner settings in the `configurations` folder.
+   * Parameters of Frenetix-Occlusion can be set in `simulation/occlusion.yaml`
+       * activate/deactivate the Module (`use_occlusion_module: True`) 
+       * activate/deactivate metrics (`activated_metrics`)
+       * set metric thresholds for trajectory assessment (`metric_thresholds`)
+       * configure the internal sensor model (`sensor_model`)
+   * further parameters, e.g. costs can be adapted in the other `*.yaml` files
+
+3. Select a scenario (default is an intersection where a left turn is performed)
+4. Execute `python3 main.py` or use your IDE GUI
+
+**OPTIONAL:**
+To incorporate custom obstacles into the scenario, this can be achieved by modifying the `simulation/occlusion.yaml` file under the `agents` section. 
+To add a custom obstacle, you must specify its position, type, velocity, timestep, and horizon.
+E.g.:
+
+    agents:
+
+        position: [16, 2.8]
+
+        velocity: 8
+
+        agent_type: "Truck"
+
+        timestep: 0
+
+        horizon: 5.0
+
+
+</details>
+
 
 
 

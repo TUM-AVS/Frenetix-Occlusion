@@ -12,7 +12,6 @@ from frenetix_occlusion.spawn_locator import SpawnLocator
 from frenetix_occlusion.metrics.metric import Metric
 from frenetix_occlusion.utils.fo_obstacle import FOObstacles
 from frenetix_occlusion.utils.visualization import FOVisualization
-from commonroad_dc.pycrccosy import CurvilinearCoordinateSystem
 import yaml, os
 
 
@@ -67,19 +66,20 @@ class FOInterface:
 
         """
 
-    def __init__(self, scenario, reference_path, vehicle_params, dt, cosy_cl=None):
+    def __init__(self, scenario, reference_path, vehicle_params, dt, config_path=None, cosy_cl=None):
 
         # load configuration from config file
-        self.config = self._load_config()
+        self.config = self._load_config(config_path)
 
         # load global variables that never change
         self.cr_scenario = scenario
         self.lanelet_network = scenario.lanelet_network
         self.ego_reference_path = reference_path
-        self.cosy_cl = CurvilinearCoordinateSystem(reference_path) if cosy_cl is None else cosy_cl
+        self.cosy_cl = cosy_cl
         self.vehicle_params = vehicle_params
         self.dt = dt
         self.plot = self.config['plot']
+        self.debug = self.config['debug']
 
         # initialize changing variables
         self.predictions = None
@@ -105,7 +105,7 @@ class FOInterface:
                                         sensor_radius=self.sensor_radius,
                                         sensor_angle=self.sensor_angle,
                                         visualization=self.visualization,
-                                        debug=True)
+                                        debug=self.debug)
 
         # initialize agent_manager
         self.agent_manager = FOAgentManager(scenario=self.cr_scenario,
@@ -114,7 +114,7 @@ class FOInterface:
                                             visualization=self.visualization,
                                             timestep=self.timestep,
                                             dt=self.dt,
-                                            debug=False,
+                                            debug=self.debug,
                                             fo_obstacles=self.fo_obstacles)
 
         # initialize spawn locator
@@ -125,15 +125,34 @@ class FOInterface:
                                           sensor_model=self.sensor_model,
                                           fo_obstacles=self.fo_obstacles,
                                           visualization=self.visualization,
-                                          debug=False)
+                                          debug=self.debug)
 
         # initialize metrics
         self.metrics = Metric(self.config['metrics'], self.vehicle_params, self.agent_manager)
 
-    def evaluate_scenario(self, predictions, ego_pos, ego_orientation, ego_pos_cl, ego_v, timestep):
+    def set_coordinate_system(self, cosy_cl):
+        self.cosy_cl = cosy_cl
+        self.spawn_locator.cosy_cl = cosy_cl
+
+    def _add_real_agents(self):
+        for agent in self.config['agents']:
+            self.agent_manager.add_agent(pos=agent['position'],
+                                         velocity=agent['velocity'],
+                                         agent_type=agent['agent_type'],
+                                         add_to_scenario=True,
+                                         timestep=agent['timestep'],
+                                         horizon=agent['horizon'])
+
+    def evaluate_scenario(self, predictions, ego_pos, ego_orientation, ego_pos_cl, ego_v, timestep, cosy_cl):
+        
+        # set current coordinate system 
+        self.set_coordinate_system(cosy_cl)
 
         # update timestep
         self._update_time_step(timestep)
+
+        # add real agents
+        self._add_real_agents()
 
         # update variables with external inputs
         self.predictions = predictions
@@ -177,8 +196,9 @@ class FOInterface:
                                          timestep=self.timestep, horizon=3.0, mode=mode, orientation=sp.orientation)
 
             # print debug message
-            print("Phantom agent of type {} with id {} added to scenario at position {}"
-                  .format(sp.agent_type, self.agent_manager.phantom_agents[-1].agent_id, sp.position))
+            if self.debug:
+                print("Phantom agent of type {} with id {} added to scenario at position {}"
+                      .format(sp.agent_type, self.agent_manager.phantom_agents[-1].agent_id, sp.position))
 
         # update pedestrian predictions after adding real pedestrians to the scenario
         self.agent_manager.update_real_agents(self.predictions)
@@ -203,23 +223,14 @@ class FOInterface:
         self.agent_manager.timestep = timestep
 
     @staticmethod
-    def _load_config(filename='config.yaml'):
+    def _load_config(filepath: str = None):
+
         # loads the config.yaml file
-        try:
-            file_path = os.path.join(os.path.dirname(__file__), "config", filename)
-            # Attempt to open and parse the YAML file
-            with open(file_path, 'r') as file:
-                data = yaml.safe_load(file)
-            return data
-        except FileNotFoundError:
-            # This exception is raised if the file is not found
-            print("The config file was not found.")
-        except yaml.YAMLError as exc:
-            # This exception is raised if there is an error parsing the YAML file
-            print("An error occurred while parsing the YAML file.")
-            if hasattr(exc, 'problem_mark'):
-                mark = exc.problem_mark
-                print(f"Error at position: ({mark.line + 1}, {mark.column + 1})")
-        except Exception as exc:
-            # General error case
-            print(f"An unexpected error has occurred: {exc}")
+        if not filepath:
+            file_path = os.path.join(os.path.dirname(__file__), "config", "config.yaml")
+            print("Load default occlusion module settings!")
+
+        with open(filepath, 'r') as file:
+            config = yaml.safe_load(file)
+
+        return config

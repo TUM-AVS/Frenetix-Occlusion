@@ -1,0 +1,48 @@
+cost_weights:
+
+    acceleration: 0.0
+    jerk: 0.00
+    lateral_jerk: 1.0
+    longitudinal_jerk: 1.0
+    orientation_offset: 0.0
+    path_length: 0.0
+
+    lane_center_offset: 0.0
+    velocity_offset: 0.1
+    velocity: 0.
+    distance_to_reference_path: 3.0
+    distance_to_obstacles: 0.1
+
+    prediction: 200
+    responsibility: 0
+
+external_cost_weights: # do not use these cost functions
+    occ_pm: 0
+    occ_um: 0
+    occ_ve: 0
+
+#names:
+#  A: Acceleration
+#  J: Jerk
+#  Jlat: Lateral Jerk
+#  Jlon: Longitudinal Jerk
+#  O: Orientation Offset
+#  L: Path Length
+
+#  LC: Lane Center Offset
+#  V: Velocity Offset
+#  VC: Velocity Costs
+#  Vlon: Longitudinal Velocity Offset
+#  O: Orientation Offset
+#  DR: Distance to Reference Path
+#  DO: Distance to Obstacles
+
+#  P: Prediction
+#  R: Responsibility
+
+  # SA: Steering Angle
+  # SR: Steering Rate
+  # Y: Yaw Rate
+  # Vlon: Longitudinal Velocity Offset
+  # T: Time
+  # ID: Inverse Duration

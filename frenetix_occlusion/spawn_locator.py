@@ -8,13 +8,11 @@ __status__ = "Beta"
 # imports
 import copy
 import numpy as np
-import warnings
 from commonroad_dc.geometry.util import compute_pathlength_from_polyline, compute_curvature_from_polyline
 from shapely.geometry import Polygon, Point, LineString
 from shapely.ops import unary_union
-from commonroad_route_planner.utility.route_util import lanelet_orientation_at_position
+from commonroad_route_planner.utility.route import lanelet_orientation_at_position
 import frenetix_occlusion.utils.helper_functions as hf
-import time
 
 
 class SpawnPoint:
@@ -125,10 +123,7 @@ class SpawnLocator:
 
         # if ego vehicle wants to turn left or go straight, search possible spawn points behind dynamic obstacles
         if self.spawn_point_behind_dynamic_obstacle and (ego_intention == 'straight ahead' or ego_intention == 'left turn'):
-            start = time.time()
             spawn_points_dynamic = self._find_spawn_point_behind_dynamic_obstacle()
-            end = time.time()
-            print('dynamic spawn point took {} seconds'.format(end - start))
             self._append_spawn_point(spawn_points_dynamic)
 
         # search possible spawn points behind static obstacles (e.g. parked cars)
@@ -263,12 +258,14 @@ class SpawnLocator:
 
             # if orientation is similar (+,- 20°) -> vehicles are driving in opposite directions
             if np.pi - self.tolerance_same_direction <= orientation_diff <= np.pi + self.tolerance_same_direction:
-                print('vehicles are on lanelets with opposite direction')
+                if self.debug:
+                    print('vehicles are on lanelets with opposite direction')
                 relevant_occluded_area = (self.sensor_model.obstacle_occlusions[dyn_obst.cr_obstacle.obstacle_id].
                                           intersection(possible_polygon))
             else:
-                # dynamic obstacle is coming from other direction
-                print('obstacle is coming from other direction')
+                if self.debug:
+                    # dynamic obstacle is coming from other direction
+                    print('obstacle is coming from other direction')
 
                 # find relevant occluded area by cropping the possible polygon to the occluded area
                 relevant_occluded_area = possible_polygon.intersection(self.sensor_model.occluded_area)
@@ -530,7 +527,8 @@ class SpawnLocator:
             intersection = np.array(occluded_area_intersection.coords)[0]
         elif occluded_area_intersection.geom_type == 'MultiLineString':
             intersection = np.array(occluded_area_intersection.geoms[-1].coords)[0]
-            warnings.warn('MultiLineString in spawn point processing detected')
+            if self.debug:
+                print('MultiLineString in spawn point processing detected')
         else:
             raise ValueError('Unknown intersection type!')
 

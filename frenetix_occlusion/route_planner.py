@@ -7,7 +7,8 @@ __status__ = "Beta"
 
 # imports
 from commonroad_route_planner.route_planner import Route
-from commonroad_route_planner.utility.route_util import lanelet_orientation_at_position
+from commonroad_route_planner.utility.route import lanelet_orientation_at_position
+from commonroad_route_planner.route import RouteType
 from typing import List
 
 
@@ -38,7 +39,7 @@ class FORoutePlanner:
         all_routes = self._find_all_routes(start_lanelet_id, max_depth=2)
 
         # convert "graph ids" to real route using commonroad Route class
-        self.route_candidates: List = [Route(self.lanelet_network, route) for route in all_routes if route]
+        self.route_candidates: List = [Route(self.lanelet_network, route, route_type=RouteType.REGULAR) for route in all_routes if route]
 
         # store reference path separately
         self.reference_paths: List = [route.reference_path for route in self.route_candidates]

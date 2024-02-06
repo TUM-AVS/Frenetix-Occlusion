@@ -1,0 +1,28 @@
+# evalute solution of individual agents
+evaluate_agents: False
+#
+collision_report: False
+
+#
+evaluate_runtime: False
+# Multiagent evaluation
+evaluate_simulation: False
+#
+# available measures in CriMe (Use=True, Ignore=False)
+criticality_metrics:
+    # Headway
+    hw: False
+    # Time-Headway
+    thw: False
+    # Time to Collision
+    ttc: False
+    # Coll prob
+
+    # jerk
+    jerk: False
+    # jerk lat
+    jerk_lat: False
+    # jerk long
+    jerk_long: False
+
+    #TODO tbc. BTN?

@@ -1,4 +1,10 @@
 ##############################################################################
+# Frenetix Occlusion settings
+##############################################################################
+use_occlusion_module: True # or False
+
+
+##############################################################################
 # Metric and threshold settings: set metrics and their threshold
 ##############################################################################
 
@@ -12,7 +18,7 @@ metrics:
     - 'cp'
 
   metric_thresholds: # max 1, null means deactivated
-    harm: 1
+    harm: 0.1
     risk: 1
     be: null
     cp: null
