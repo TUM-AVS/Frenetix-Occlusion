@@ -53,6 +53,22 @@ spawn_locator:
 # Real agent settings: define agents that shall be added to the real scenario
 ##############################################################################
 
+# agents for left turn in intersection (bicyclist emerging behind car, scenario 1 in our paper)
+# to resimulate the paper experiments, some adjustments must be done(see Readme)
+
+#agents:
+#  - position: [31.3, 0]
+#    velocity: 8
+#    agent_type: "Car"
+#    timestep: 0
+#    horizon: 5.0
+#  - position: [36.4, 1]
+#    velocity: 6
+#    agent_type: "Bicycle"
+#    timestep: 0
+#    horizon: 5.0
+
+# agents for left turn in intersection (bicyclist emerging behind truck, scenario 2 in our paper)
 agents:
   - position: [16, 2.8]
     velocity: 8
@@ -62,7 +78,7 @@ agents:
   - position: [14.4, 6.9]
     velocity: 5.5
     agent_type: "Bicycle"
-    timestep: 8
+    timestep: 6
     horizon: 5.0
 
 

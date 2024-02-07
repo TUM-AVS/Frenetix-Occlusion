@@ -10,10 +10,10 @@ cost_weights:
     lane_center_offset: 0.0
     velocity_offset: 0.1
     velocity: 0.
-    distance_to_reference_path: 3.0
+    distance_to_reference_path: 10.0
     distance_to_obstacles: 0.1
 
-    prediction: 200
+    prediction: 100
     responsibility: 0
 
 external_cost_weights: # do not use these cost functions

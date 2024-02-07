@@ -135,6 +135,8 @@ class FOInterface:
         self.spawn_locator.cosy_cl = cosy_cl
 
     def _add_real_agents(self):
+        if self.config['agents'] is None:
+            return
         for agent in self.config['agents']:
             self.agent_manager.add_agent(pos=agent['position'],
                                          velocity=agent['velocity'],

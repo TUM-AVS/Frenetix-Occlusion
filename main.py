@@ -7,6 +7,8 @@ import traceback
 from cr_scenario_handler.simulation.simulation import Simulation
 from cr_scenario_handler.utils.configuration_builder import ConfigurationBuilder
 from cr_scenario_handler.utils.general import get_scenario_list
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def start_simulation(scenario_name, scenario_folder, mod_path, logs_path, use_cpp, start_multiagent=False, count=0):
@@ -60,7 +62,8 @@ def main():
     # **********************************************************************
     # If the previous are set to "False", please specify a specific scenario
     # **********************************************************************
-    scenario_name = "03_intersection_left_turn"  # do not add .xml format to the name
+    scenario_list = ['scenario1', 'scenario2', 'scenario3']
+    scenario_name = scenario_list[0]  # do not add .xml format to the name
 
     scenario_files = get_scenario_list(scenario_name, scenario_folder, False, None, False)
 
