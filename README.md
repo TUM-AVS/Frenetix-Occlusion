@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/676952944.svg)](https://zenodo.org/doi/10.5281/zenodo.10634223)
 
 [![Linux](https://img.shields.io/badge/os-linux-blue.svg)](https://www.linux.org/)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
@@ -51,7 +52,7 @@ An appropriate configuration is already included in this package.
 2. **Clone** this repository & create a new virtual environment `python3.10 -m venv venv`
 
 3. **Install** the package:
-    * Source & Install the package via pip: `source venv/bin/activate` & `pip install .`
+    * Source & Install the package via pip: `source venv/bin/activate` & `pip install .` or with [poetry](https://python-poetry.org/) `poetry install`
     * Everything should install automatically. If not please write [korbinian.moller@tum.de](mailto:korbinian.moller@tum.de).
 4. **Optional**: Download additional Scenarios [here](https://gitlab.lrz.de/tum-cps/commonroad-scenarios.git)
 
@@ -64,7 +65,7 @@ An appropriate configuration is already included in this package.
 
 To execute the main with an example Frenet Planning algorithm from [here](https://github.com/TUM-AVS/Frenetix-Motion-Planner), do the following steps: 
 
-1. Install Frenetix-Motion-Planner with `pip install frenetix-motion-planner`
+1. Install Frenetix-Motion-Planner with `pip install frenetix-motion-planner==2024.1.1`
 2. **OPTIONAL:** Configure the Occlusion Module parameters or Planner settings in the `configurations` folder.
    * Parameters of Frenetix-Occlusion can be set in `simulation/occlusion.yaml`
        * activate/deactivate the Module (`use_occlusion_module: True`) 

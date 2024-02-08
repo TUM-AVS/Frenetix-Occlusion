@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "frenetix-occlusion"
-version = "2024.1"
-description = "Frenetix Occlusion-aware Trejectory Validation Framework"
+version = "2024.1.2"
+description = "Frenetix Occlusion-aware Trajectory Validation Framework"
 license = "LGPL-3.0-or-later"
 authors = [
     "Korbinian Moller <korbinian.moller@tum.de>",
